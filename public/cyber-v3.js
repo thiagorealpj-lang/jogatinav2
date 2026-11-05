@@ -54,7 +54,13 @@
     top.innerHTML=`<span class="v3-view-heading" id="v3-view-label"># geral</span>`+link('lobby','Bora jogar?','🎮')+link('profile','Perfil','👤');
     const actions=topbar.querySelector('.tb-actions');if(actions)topbar.insertBefore(top,actions);else topbar.append(top);
     const promo=document.createElement('section');promo.id='v3-chat-promo';promo.className='v3-promo';
-    main.insertBefore(promo,$('#composer'));
+    // O card faz parte do feed de mensagens como na prévia aprovada.
+    const feed=$('#messages');
+    if(feed){
+      const attach=()=>{if(!feed.contains(promo))feed.appendChild(promo);};
+      attach();
+      new MutationObserver(attach).observe(feed,{childList:true});
+    } else main.insertBefore(promo,$('#composer'));
     for(const id of ['lobby','profile','clips']){
       const sec=document.createElement('section');sec.id='v3-'+id;sec.className='v3-page hidden';
       main.insertBefore(sec,$('#composer'));
