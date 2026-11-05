@@ -62,7 +62,7 @@ body.v3-enabled .mem-name{font:800 14px Inter,system-ui,sans-serif;}
 body.v3-enabled .mem-sub{font:450 11px Inter,system-ui,sans-serif;color:#6de0c0;}
 body.v3-enabled .mem-info{line-height:1.55;}
 /* Large, illustrated game session is part of the chat, not an extra generic toolbar. */
-body.v3-enabled .v3-promo{position:relative;display:block;overflow:hidden;min-height:209px;max-height:258px;margin:9px 29px 12px;padding:0;border:2px solid #bc50fa;border-radius:17px;background:linear-gradient(90deg,#1d1739 5%,#1c1639a6 52%,#180d31 100%),url('/assets/lobby-cyber.svg') 100% 42% / auto 160% no-repeat;box-shadow:0 0 18px #c12fff6b,0 0 9px #16dcea50;flex-shrink:0;}
+body.v3-enabled .v3-promo{position:relative;display:block;overflow:hidden;min-height:209px;max-height:258px;margin:9px 29px 12px;padding:0;border:2px solid #bc50fa;border-radius:17px;background:linear-gradient(90deg,#1d1739 5%,#1c1639aa 52%,rgba(18,10,36,.16) 100%),url('/assets/lobby-cyber.svg') 100% 42% / auto 160% no-repeat;box-shadow:0 0 18px #c12fff6b,0 0 9px #16dcea50;flex-shrink:0;}
 body.v3-enabled .v3-promo:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(12,11,29,.88) 0%,rgba(14,12,31,.56) 59%,transparent 90%);}
 .v3-card-body{position:relative;z-index:1;padding:17px 21px 15px;max-width:76%;}
 .v3-card-overline{font:800 11px Inter,system-ui,sans-serif;color:#65f6ff;letter-spacing:1.4px;text-transform:uppercase;margin-bottom:3px;}
