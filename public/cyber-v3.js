@@ -4,8 +4,7 @@
   let app = null;
   const V = { view:'chat', profiles:{}, lobby:null, clips:[], agenda:[], draft:null, search:'' };
   const $ = s => document.querySelector(s);
-  const $ = s => [...document.querySelectorAll(s)];
-  const $ = s => [...document.querySelectorAll(s)];
+  const queryAll = s => Array.from(document.querySelectorAll(s));
   const E = v => String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const games = ['Valorant','CS2','League of Legends','Fortnite','Minecraft','Rocket League','Outro'];
   const actName = {online:'Online',jogando:'Jogando agora',duo:'Procurando duo',afk:'AFK'};
@@ -29,7 +28,7 @@
     const isChat=view==='chat';
     ['#chat','#typing','#composer','#v3-chat-promo'].forEach(s=>{const n=$(s);if(n)n.classList.toggle('hidden',!isChat);});
     ['lobby','profile','clips'].forEach(s=>$('#v3-'+s)?.classList.toggle('hidden',view!==s));
-    $$('.v3-link').forEach(btn=>btn.classList.toggle('v3-active',btn.dataset.v3View===view));
+    queryAll('.v3-link').forEach(btn=>btn.classList.toggle('v3-active',btn.dataset.v3View===view));
     $('#v3-view-label').textContent=title();
     const stage=$('#stage');
     if(stage){
@@ -66,10 +65,14 @@
     const mfoot=document.createElement('div');mfoot.id='v3-members-foot';members.append(mfoot);
     mhead.querySelector('input').addEventListener('input',e=>{V.search=e.target.value.toLowerCase();filterMembers();});
     new MutationObserver(filterMembers).observe($('#members-list'),{childList:true});
-    const face=document.createElement('span');face.id='v3-brand-symbol';face.textContent='🎮';
+    const legacyBrand=sidebar.querySelector('.logo');
+    if(legacyBrand){legacyBrand.innerHTML='<span>JOGATINA<br>DOS AMIGOS</span><small>BY C0KZ</small>';}
+    const invite=sidebar.querySelector('#btn-invite');
+    if(invite){invite.textContent='🔗  Convidar amigos';sidebar.querySelector('.server-head')?.after(invite);}
+    const face=document.createElement('span');face.id='v3-brand-symbol';face.textContent='';
     sidebar.querySelector('.server-head')?.prepend(face);
     // Somente o usuário C0kz validado pelo servidor ganha o badge de master no perfil.
-    $$('.v3-link').forEach(b=>b.addEventListener('click',()=>show(b.dataset.v3View)));
+    queryAll('.v3-link').forEach(b=>b.addEventListener('click',()=>show(b.dataset.v3View)));
     const mdock=document.createElement('div');mdock.id='v3-mobile-voice-dock';mdock.className='hidden';main.append(mdock);
     const mark=document.createElement('span');mark.id='v3-voice-status';
     sidebar.querySelector('#voice-panel')?.append(mark);
@@ -90,10 +93,24 @@
     $('#v3-dock-leave')?.addEventListener('click',()=>$('#btn-leave-voice')?.click());
   }
   function renderPromo(){
-    const p=$('#v3-chat-promo');if(!p)return;
-    const lobby=V.lobby;
-    p.innerHTML=`<div class="v3-promo-badge">🎮</div><div class="v3-promo-copy"><strong>${lobby?'Bora jogar? · '+E(lobby.game):'Bora jogar?'}</strong><small>${lobby?`${lobby.players.length}/${lobby.capacity} na sala · ${lobby.players.filter(x=>x.ready).length} prontos`:'Monte uma partida e convide a rapaziada!'}</small></div><div class="v3-promo-faces">${(lobby?.players||[]).slice(0,5).map(p=>photo(p.nick,'tiny')).join('')}</div><button id="v3-promo-open" class="v3-btn v3-btn-glow">${lobby?'Abrir lobby':'Organizar partida'} →</button>`;
-    $('#v3-promo-open').addEventListener('click',()=>show('lobby'));
+    const host=$('#v3-chat-promo'); if(!host)return;
+    const l=V.lobby; const players=l?.players||[];
+    const joined=players.some(p=>key(p.nick)===key(myNick()));
+    const mine=players.find(p=>key(p.nick)===key(myNick()));
+    const ready=players.filter(p=>p.ready).length;
+    host.innerHTML=`<div class="v3-card-body">
+      <div class="v3-card-overline">JOGATINA DOS AMIGOS · SESSÃO DA GALERA</div>
+      <div class="v3-card-title"><span aria-hidden="true">🎮</span> Bora jogar? ${l?'<span class="v3-card-state">● Lobby aberto</span>':''}</div>
+      <p class="v3-card-sub">${l?'Montado por '+E(l.host)+'. Confirme sua presença!':'Escolha o jogo, monte seu lobby e chame a rapaziada.'}</p>
+      <div class="v3-card-meta"><span class="v3-card-tag">🎯 ${E(l?.game||'VALORANT')}</span><span class="v3-card-tag">🏆 ${E(l?.mode||'Competitivo')}</span><span class="v3-card-tag">👥 ${players.length}/${l?.capacity||5} jogadores</span></div>
+      <div class="v3-card-info">
+        <div class="v3-card-faces">${players.length?players.slice(0,5).map(p=>photo(p.nick,'small')).join(''):'<span class="v3-muted">Organize a primeira partida!</span>'}</div>
+        ${l?'<span class="v3-card-state">✓ '+ready+' prontos</span>':''}
+        <button class="v3-btn v3-btn-glow v3-card-cta" id="v3-promo-open">${l?(joined?(mine?.ready?'✓ Estou pronto':'Confirmar presença'):'Entrar no lobby'):'Criar lobby'} ▶</button>
+        ${l?'<button class="v3-btn v3-btn-tiny" id="v3-promo-details">Ver detalhes</button>':''}
+      </div></div>`;
+    $('#v3-promo-open')?.addEventListener('click',()=>{if(!l){show('lobby');return;}if(!joined){send('lobby:join');show('lobby');return;}send('lobby:ready');});
+    $('#v3-promo-details')?.addEventListener('click',()=>show('lobby'));
   }
   function renderRight(){
     const box=$('#v3-members-foot');if(!box||!app)return;
