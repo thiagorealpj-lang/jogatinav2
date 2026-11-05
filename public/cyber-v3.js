@@ -4,6 +4,7 @@
   let app = null;
   const V = { view:'chat', profiles:{}, lobby:null, clips:[], agenda:[], draft:null, search:'' };
   const $ = s => document.querySelector(s);
+  const $ = s => [...document.querySelectorAll(s)];
   const E = v => String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const games = ['Valorant','CS2','League of Legends','Fortnite','Minecraft','Rocket League','Outro'];
   const actName = {online:'Online',jogando:'Jogando agora',duo:'Procurando duo',afk:'AFK'};
