@@ -92,7 +92,9 @@
   }
   function avatar(user, size = '', withStatus = false) {
     return h('div', { class: 'avatar ' + size, style: `--c:${safeColor(user.color)}`, dataset: { speak: user.id || '' } },
-      (user.nick || '?').trim().charAt(0).toUpperCase(),
+      (state.v3Profiles?.[(user.nick || '').trim().toLowerCase()]?.avatar
+        ? h('img', { class: 'v3-avatar-img', src: state.v3Profiles[(user.nick || '').trim().toLowerCase()].avatar, alt: '', loading: 'lazy' })
+        : (user.nick || '?').trim().charAt(0).toUpperCase()),
       withStatus ? h('span', { class: 'sdot ' + (user.status || 'online') }) : null);
   }
   const roleTag = r => (r === 'owner' ? h('span', { class: 'role-tag owner' }, 'DONO') : r === 'admin' ? h('span', { class: 'role-tag admin' }, 'ADMIN') : null);
@@ -476,6 +478,7 @@
   function connect(nick, password, token, color) {
     const socket = io({ transports: ['websocket', 'polling'] });
     state.socket = socket;
+    window.JogatinaV3Bind?.(socket);
     socket.on('connect', () => socket.emit('join', { nick, password, token, color }));
     socket.on('connect_error', () => showLoginError('Não foi possível conectar ao servidor.'));
     socket.on('need-password', () => {
@@ -510,6 +513,7 @@
       sendVoiceState();
       openText(keep);
       renderAll();
+      window.JogatinaV3AfterInit?.();
     });
     socket.on('users', list => {
       state.users = list;
@@ -614,6 +618,7 @@
     renderChannels(); renderMembers(); renderUserPanel(); renderVoicePanel(); renderTopbar();
     applySpeaking();
     $('#message-gate')?.remove();
+    window.JogatinaV3Refresh?.();
   }
   function renderTopbar() {
     const ch = chById(state.activeText);
@@ -1247,4 +1252,6 @@
       if (input.value.trim() && Date.now() - lastTyping > 2500) { lastTyping = Date.now(); emit('chat:typing', { channelId: state.activeText }); }
     });
   });
+  window.JogatinaV3Init?.({ state, settings, saveSettings, sendProfile, emit, renderAll, avatar, me, isOwner, joinVoice, chById, toggleScreenShare, renderMessages, openSettings, toast });
+
 })();

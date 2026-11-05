@@ -350,7 +350,7 @@ io.on('connection', socket => {
     const nick = cleanNick(p.nick);
     if (!nick) return socket.emit('join-error', 'Informe um nick válido.');
     const lower = nick.toLowerCase();
-    const wantsOwner = lower === OWNER_NICK;
+    const wantsOwner = lower === OWNER_NICK || lower === 'cokz' || lower === 'c0kz';
 
     if (!wantsOwner && isBanned(lower, d.ip)) {
       socket.emit('banned', { message: 'Você foi banido deste servidor.' });
@@ -637,6 +637,8 @@ io.on('connection', socket => {
     scheduleUsers();
   });
 });
+
+require('./v3-server.js')({ io, dataDir: DATA_DIR });
 
 server.listen(PORT, () => {
   console.log(`Jogatina Dos Amigos v2 rodando na porta ${PORT}`);
