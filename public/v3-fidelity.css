@@ -91,3 +91,12 @@ body.v3-enabled #user-panel{order:4;}
 @media(max-width:1250px){body.v3-enabled #app{grid-template-columns:270px minmax(0,1fr);}body.v3-enabled #members{width:290px;}body.v3-enabled .v3-promo{margin:6px 14px 9px;} .v3-card-body{max-width:90%;}}
 @media(max-width:850px){body.v3-enabled #app{display:grid;grid-template-columns:1fr;height:100dvh;}body.v3-enabled #sidebar{z-index:220;}body.v3-enabled #topbar{padding:0 8px;height:57px;min-height:57px;}body.v3-enabled .tb-title{font-size:18px;}body.v3-enabled #v3-topnav .v3-link{padding:8px;}body.v3-enabled .tb-btn{font-size:12px;padding:4px 7px;}body.v3-enabled #messages{padding:8px 9px;}body.v3-enabled .v3-promo{min-height:175px;max-height:220px;}body.v3-enabled #composer{padding:0 8px 12px;}body.v3-enabled .v3-card-body{padding:13px;max-width:96%;}body.v3-enabled .v3-card-title{font-size:19px;}body.v3-enabled .v3-card-sub{margin-bottom:9px;}body.v3-enabled .v3-card-info{gap:7px;}body.v3-enabled .v3-card-meta{margin-bottom:9px;}}
 @media(max-width:520px){body.v3-enabled #v3-topnav{display:none;}body.v3-enabled #topbar .tb-actions{margin-left:auto;}body.v3-enabled #topbar{gap:6px;}body.v3-enabled .tb-title{font-size:15px;}body.v3-enabled .msg{gap:7px;}body.v3-enabled .msg-side{width:30px;}body.v3-enabled .avatar{width:32px;height:32px;}body.v3-enabled .v3-promo{min-height:172px;margin:6px 8px;}body.v3-enabled .v3-card-title{font-size:17px;}body.v3-enabled .v3-card-sub{font-size:10px;}body.v3-enabled .v3-card-meta{gap:4px;}body.v3-enabled .v3-card-tag{padding:4px 6px;font-size:9px;}body.v3-enabled .v3-card-info .v3-face{width:27px;height:27px;}body.v3-enabled .v3-card-cta{padding:7px;font-size:10px;}body.v3-enabled #user-panel{padding:7px;}}
+
+/* On small screens the channel drawer must retain access to Lobby, Profile and Clips. */
+@media(max-width:850px){
+  body.v3-enabled #v3-sidebar-nav{display:grid;order:2;}
+  body.v3-enabled .sidebar-scroll{order:3;}
+  body.v3-enabled #voice-panel{order:4;}
+  body.v3-enabled #user-panel{order:5;}
+  body.v3-enabled #sidebar{overflow-y:auto;}
+}
