@@ -638,6 +638,8 @@ io.on('connection', socket => {
   });
 });
 
+require('./v3-server.js')({ io, dataDir: DATA_DIR });
+
 server.listen(PORT, () => {
   console.log(`Jogatina Dos Amigos v2 rodando na porta ${PORT}`);
   console.log(`Assistente: ${GEMINI_KEY ? 'Gemini (' + GEMINI_MODEL + ')' : 'modo local (defina GEMINI_API_KEY para IA completa)'}`);
