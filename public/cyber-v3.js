@@ -57,7 +57,7 @@
     // O card faz parte do feed de mensagens como na prévia aprovada.
     const feed=$('#messages');
     if(feed){
-      const attach=()=>{if(!feed.contains(promo))feed.appendChild(promo);};
+      const attach=()=>{if(feed.lastElementChild!==promo)feed.appendChild(promo);};
       attach();
       new MutationObserver(attach).observe(feed,{childList:true});
     } else main.insertBefore(promo,$('#composer'));
